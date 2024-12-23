@@ -9,17 +9,19 @@ import logout from "../assets/logout.png";
 import {Link, useNavigate} from "react-router-dom";
 import {IoIosLogOut} from "react-icons/io";
 
-const handleLogout = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const navigate = useNavigate();
-
-    // Example: Clear user session data or authentication token
-    localStorage.removeItem("authToken");
-    // Redirect to the login page after logout
-    navigate("/login");
-};
 
 const Sidebar = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+
+        // Example: Clear user session data or authentication token
+        localStorage.removeItem("authToken");
+        // Redirect to the login page after logout
+        navigate("/login");
+    };
+
     return (
         <div className="w-96 h-[966px] text-white p-5 bg-navColor">
             <div className="flex items-center justify-center">
@@ -75,9 +77,10 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
+
                     <li className="mb-6 mt-[350px] mx-14 w-56 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder">
                         <button onClick={handleLogout} className="flex items-start justify-items-center">
-                            <IoIosLogOut />
+                            <img src={logout} alt="icon logout" className="inline w-5"/>
                             <h1 className="ml-3">
                                 Log Out
                             </h1>
