@@ -12,7 +12,9 @@ const EditArticle = () => {
   useEffect(() => {
     const getArticleById = async () => {
       try {
-        const response = await axios.get(`https://backend-rust-rho.vercel.app/api/article/${id}`);
+        const response = await axios.get(
+          `https://backend-rust-rho.vercel.app/api/article/${id}`
+        );
         setImage(response.data.image);
         setTitle(response.data.title);
         setDescription(response.data.deskripsi);
@@ -28,11 +30,14 @@ const EditArticle = () => {
   const updateArticle = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`https://backend-rust-rho.vercel.app/api/article/${id}`, {
-        image,
-        title,
-        deskripsi: description,
-      });
+      await axios.patch(
+        `https://backend-rust-rho.vercel.app/api/article/${id}`,
+        {
+          image,
+          title,
+          deskripsi: description,
+        }
+      );
       alert("Article updated successfully!");
       navigate("/article");
     } catch (error) {

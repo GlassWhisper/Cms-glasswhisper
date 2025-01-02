@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 const Article = () => {
   const { mutate } = useSWRConfig();
   const fetcher = async () => {
-    const response = await axios.get("https://backend-rust-rho.vercel.app/api/article");
+    const response = await axios.get(
+      "https://backend-rust-rho.vercel.app/api/article"
+    );
     return response.data; // Mengembalikan seluruh response API
   };
 
@@ -19,11 +21,15 @@ const Article = () => {
   }
 
   const deleteArticle = async (articleId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this article?");
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this article?"
+    );
     if (!confirmDelete) return; // Jika pengguna membatalkan, hentikan proses
 
     try {
-      await axios.delete(`https://backend-rust-rho.vercel.app/api/article/${articleId}`);
+      await axios.delete(
+        `https://backend-rust-rho.vercel.app/api/article/${articleId}`
+      );
       alert("Article deleted successfully.");
       mutate("article");
     } catch (error) {
@@ -63,7 +69,9 @@ const Article = () => {
                       className="h-12 w-12 object-cover rounded"
                     />
                   </td>
-                  <td className="py-3 px-6 font-medium text-gray-900">{article.title}</td>
+                  <td className="py-3 px-6 font-medium text-gray-900">
+                    {article.title}
+                  </td>
                   <td className="py-3 px-6">{article.deskripsi}</td>
                   <td className="py-3 px-1 text-center">
                     <Link
