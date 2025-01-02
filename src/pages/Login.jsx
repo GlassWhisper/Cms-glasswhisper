@@ -25,7 +25,7 @@ function Login() {
         setLoading(true);
 
         try {
-            const response = await axiosInstance.post('/api/auth/login', {
+            const response = await axiosInstance.post('/auth/login', {
                 email: email,
                 password: password
             });
@@ -35,7 +35,7 @@ function Login() {
             if (access_token) {
                 localStorage.setItem('authToken', access_token);  // Simpan token
                 localStorage.setItem('role', data.role);  // Simpan role
-                // console.log("Token disimpan:", localStorage.getItem('authToken'));
+                console.log("Token disimpan:", localStorage.getItem('authToken'));
 
 
                 setSuccess(true);
