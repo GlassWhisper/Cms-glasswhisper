@@ -37,7 +37,7 @@ const Sidebar = () => {
             {/*navigasi*/}
             <nav className="mt-16 text-black">
                 <ul>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder">
+                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
                         <Link to="/" className="flex items-start justify-items-start">
                             <img src={dashboard} alt="icon dashboard" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -45,7 +45,7 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder">
+                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
                         <Link to="/article" className="flex items-start justify-items-start">
                             <img src={article} alt="icon article" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -53,7 +53,7 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder">
+                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
                         <Link to="/profile" className="flex items-start justify-items-start">
                             <img src={profil} alt="icon profil" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -61,7 +61,7 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder">
+                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
                         <Link to="/user" className="flex items-start justify-items-start">
                             <img src={user} alt="icon user" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -69,7 +69,7 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder">
+                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
                         <Link to="/setting" className="flex items-start justify-items-start">
                             <img src={setting} alt="icon setting" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -78,7 +78,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
 
-                    <li className="mb-6 mt-[350px] mx-14 w-56 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder">
+                    <li className="mb-6 mt-[350px] mx-14 w-56 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder hover:bg-amber-600">
                         <button onClick={handleLogout} className="flex items-start justify-items-center">
                             <img src={logout} alt="icon logout" className="inline w-5"/>
                             <h1 className="ml-3">
