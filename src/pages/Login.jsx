@@ -13,7 +13,7 @@ function Login() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        emailRef.current.focus(); // Fokuskan ke input email saat pertama kali render
+        emailRef.current.focus();
     }, []);
 
     useEffect(() => {
@@ -35,7 +35,7 @@ function Login() {
             if (access_token) {
                 localStorage.setItem('authToken', access_token);  // Simpan token
                 localStorage.setItem('role', data.role);  // Simpan role
-                console.log("Token disimpan:", localStorage.getItem('authToken'));
+                // console.log("Token disimpan:", localStorage.getItem('authToken'));
 
 
                 setSuccess(true);

@@ -9,12 +9,16 @@ import Home from "./pages/Home.jsx";
 
 function RequireAuth({ children }) {
     const token = localStorage.getItem("authToken");
-    const role = localStorage.getItem("role");
+    // const role = localStorage.getItem("role");
 
-    if (!token || role !== "admin") {
+    if (!token ) {
         return <Navigate to="/login" />;
     }
     return children;
+    // if (!token || role !== "admin") {
+    //     return <Navigate to="/login" />;
+    // }
+    // return children;
 }
 
 function App() {
