@@ -4,9 +4,9 @@ import axiosInstance from "../services/Api.js"; // Pastikan path ini sesuai deng
 import login from "../assets/login-cms.png";
 
 function Login() {
-    const emailRef = useRef(); // Ganti nama userRef menjadi emailRef
-    const navigate = useNavigate(); // Hook untuk navigasi
-    const [email, setEmail] = useState(""); // Ganti user menjadi email
+    const emailRef = useRef();
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errMsg, setErrMsg] = useState("");
     const [success, setSuccess] = useState(false);
@@ -31,11 +31,12 @@ function Login() {
                 password: password,
             });
 
-            const { access_token, data } = response.data; // Ambil data dan token
+            const { access_token, data } = response.data;
 
             if (access_token) {
-                localStorage.setItem("authToken", access_token); // Simpan token
-                localStorage.setItem("role", data.role); // Simpan role
+                localStorage.setItem("authToken", access_token);
+                localStorage.setItem("role", data.role);
+                console.log("Token disimpan:", localStorage.getItem("authToken"));
                 setSuccess(true);
                 setErrMsg("");
                 navigate("/"); // Redirect ke halaman utama
@@ -112,7 +113,7 @@ function Login() {
             </div>
 
             {/* foto ges */}
-            <div className="flex w-1/2 bg-bg-register items-center px-32 justify-centerborder border-black">
+            <div className="flex w-1/2 bg-bg-register items-center px-32 justify-center border border-black">
                 <img src={login} alt="About" className="w-[750px] object-cover" />
             </div>
         </div>

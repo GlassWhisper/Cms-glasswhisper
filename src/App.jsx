@@ -16,16 +16,12 @@ import EditArticle from "./pages/Article/EditArticle.jsx";
 
 function RequireAuth({ children }) {
   const token = localStorage.getItem("authToken");
-  // const role = localStorage.getItem("role");
+  const role = localStorage.getItem("role");
 
-  if (!token) {
+  if (!token || role !== "admin") {
     return <Navigate to="/login" />;
   }
   return children;
-  // if (!token || role !== "admin") {
-  //     return <Navigate to="/login" />;
-  // }
-  // return children;
 }
 
 function App() {
@@ -55,23 +51,3 @@ function App() {
 }
 
 export default App;
-
-{
-  /*<Route path="/" element={*/
-}
-{
-  /*    // <RequireAuth>*/
-}
-{
-  /*    //     <Dashboard />*/
-}
-{
-  /*    // </RequireAuth>}>}*/
-}
-{
-  /*    // <Route index element={<HomePage />} />*/
-}
-
-{
-  /*    </Route>*/
-}
