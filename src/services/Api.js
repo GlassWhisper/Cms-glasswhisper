@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-    (config) => {      
+    (config) => {
         const token = localStorage.getItem('authToken'); // Ambil token dari localStorage
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
@@ -16,36 +16,30 @@ axiosInstance.interceptors.request.use(
         return config;
     },
     (error) => {
-        console.log(error);
+        return Promise.reject(error);
     }
 );
 
 axiosInstance.interceptors.response.use(
     (response) => {
-      if (response.status === 200 || response.status === 201) {
-        return response;
-      } else {
-        if (messages) {
-          if (messages instanceof Array) {
-            return Promise.reject({ messages });
-          }
-          return Promise.reject({ messages: [messages] });
+        if (response.status === 200 || response.status === 201) {
+            return response;
+        } else {
+            const messages = response.data?.messages;
+            return Promise.reject({ messages: messages || ["got errors"] });
         }
-        return Promise.reject({ messages: ["got errors"] });
-      }
     },
     (error) => {
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem("authToken"); 
-        localStorage.removeItem("role");
-        history.replace({ pathname: "/login" });
-      } else if (error.response && error.response.status === 500) {
-        return Promise.reject(error.response);
-      } else return Promise.reject(error);
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem("authToken"); 
+            localStorage.removeItem("role");
+            window.location.href = '/login'; // Redirect ke halaman login tanpa refresh manual
+        } else if (error.response && error.response.status === 500) {
+            return Promise.reject(error.response);
+        } else {
+            return Promise.reject(error);
+        }
     }
-  );
-  
+);
 
 export default axiosInstance;
-
-
