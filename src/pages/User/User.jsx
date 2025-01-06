@@ -11,22 +11,20 @@ const User = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: "", type: "" });
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axiosInstance.get("/users", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setUsers(response.data.data);
-      } catch (err) {
-        setError(err.response ? err.response.data.message : "Failed to fetch data");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchUsers = async () => {
+    try {
+      const response = await axiosInstance.get("users");
+      setUsers(response.data.data);
+    } catch (err) {
+      setError(err.response ? err.response.data.message : "Failed to fetch data");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+
+  useEffect(() => {
+    
     fetchUsers();
   }, []);
 
@@ -144,7 +142,7 @@ const User = () => {
                   {users.map((user, index) => (
                     <tr
                       key={user.id}
-                      className="hover:bg-colorService transition-colors duration-200 ease-in-out border-b border-gray-200 last:border-b-0"
+                      className="bg-colorService hover:bg-colorAbout transition-colors duration-200 ease-in-out border-b border-gray-200 last:border-b-0"
                     >
                       <td className="px-6 py-4 text-center">{index + 1}</td>
                       <td className="px-6 py-4">
