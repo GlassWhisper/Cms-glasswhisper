@@ -23,7 +23,7 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="w-96 h-[966px] text-white p-5 bg-navColor">
+        <div className="w-80 min-h-screen text-white p-5 bg-navColor">
             <div className="flex items-center justify-center">
                 <img className="inline w-7" src={logo} alt="logo"/>
                 <h1 className="font-pociono text-black text-4xl ml-4">
@@ -34,10 +34,11 @@ const Sidebar = () => {
             {/*garis katulistiwa horizontal*/}
             <h1 className="w-full border-t border-black mt-7"/>
 
+            {/*mb-6 mx-14 w-56 px-8 py-3*/}
             {/*navigasi*/}
             <nav className="mt-16 text-black">
                 <ul>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
+                    <li className="mb-12 mx-7 w-56 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
                         <Link to="/" className="flex items-start justify-items-start">
                             <img src={dashboard} alt="icon dashboard" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -45,7 +46,8 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
+
+                    <li className="mb-12 mx-7 w-56 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
                         <Link to="/article" className="flex items-start justify-items-start">
                             <img src={article} alt="icon article" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -53,15 +55,8 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
-                        <Link to="/profile" className="flex items-start justify-items-start">
-                            <img src={profil} alt="icon profil" className="inline w-5"/>
-                            <h1 className="ml-3">
-                                Profile
-                            </h1>
-                        </Link>
-                    </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
+
+                    <li className="mb-12 mx-7 w-56 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
                         <Link to="/user" className="flex items-start justify-items-start">
                             <img src={user} alt="icon user" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -69,23 +64,17 @@ const Sidebar = () => {
                             </h1>
                         </Link>
                     </li>
-                    <li className="mb-8 mx-3 w-80 px-8 py-3 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-600">
-                        <Link to="/setting" className="flex items-start justify-items-start">
-                            <img src={setting} alt="icon setting" className="inline w-5"/>
-                            <h1 className="ml-3">
-                                Setting
-                            </h1>
-                        </Link>
-                    </li>
 
-                    <li className="mb-6 mt-[350px] mx-14 w-56 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder hover:bg-amber-600">
-                        <button onClick={handleLogout} className="flex items-start justify-items-center">
-                            <img src={logout} alt="icon logout" className="inline w-5"/>
-                            <h1 className="ml-3">
-                                Log Out
-                            </h1>
-                        </button>
-                    </li>
+                    <footer className="flex text-center bottom-0 absolute">
+                        <li className="mb-6 mx-11 w-48 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder hover:bg-font">
+                            <button onClick={handleLogout} className="flex items-start justify-items-center">
+                                <img src={logout} alt="icon logout" className="inline w-5"/>
+                                <h1 className="ml-3">
+                                    Log Out
+                                </h1>
+                            </button>
+                        </li>
+                    </footer>
                 </ul>
             </nav>
         </div>
