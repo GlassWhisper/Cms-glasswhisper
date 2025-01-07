@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../services/Api.js"; // Pastikan path ini sesuai dengan file axiosInstance Anda
+import axiosInstance from "../services/Api.js";
 import login from "../assets/login-cms.png";
+import { PulseLoader } from "react-spinners"; // Import spinner yang akan digunakan
 
 function Login() {
     const emailRef = useRef();
@@ -39,7 +40,7 @@ function Login() {
                 console.log("Token disimpan:", localStorage.getItem("authToken"));
                 setSuccess(true);
                 setErrMsg("");
-                navigate("/"); // Redirect ke halaman utama
+                navigate("/");
             } else {
                 setErrMsg("Login gagal, token tidak diterima.");
                 setSuccess(false);
@@ -90,14 +91,19 @@ function Login() {
                         </div>
                     </div>
 
-                    {/* garis katulistiwa horizontal */}
                     <h1 className="w-full border-t-2 border-black mt-20 mb-14" />
 
                     <button
-                        className="bg-button w-full text-white font-bold text-[18px] py-2 border border-navColor rounded-md"
+                        className="bg-button w-full text-white font-bold text-[18px] py-3 border border-navColor rounded-md flex items-center justify-center"
+                        disabled={loading}
                     >
                         {loading ? (
-                            <img className="h-10 w-10" src="/gif/spin.gif" alt="loading" />
+                            <PulseLoader 
+                                color="#ffffff" 
+                                loading={loading} 
+                                size={10}
+                                margin={5}
+                            />
                         ) : (
                             "Sign In"
                         )}
@@ -112,7 +118,6 @@ function Login() {
                 </form>
             </div>
 
-            {/* foto ges */}
             <div className="flex w-1/2 bg-bg-register items-center px-32 justify-center border border-black">
                 <img src={login} alt="About" className="w-[750px] object-cover" />
             </div>
