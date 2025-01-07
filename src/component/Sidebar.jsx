@@ -38,7 +38,7 @@ const Sidebar = () => {
             {/*navigasi*/}
             <nav className="mt-16 text-black">
                 <ul>
-                    <li className="mb-12 mx-7 w-56 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
+                    <li className="mb-12 mx-7 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
                         <Link to="/" className="flex items-start justify-items-start">
                             <img src={dashboard} alt="icon dashboard" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -47,7 +47,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
 
-                    <li className="mb-12 mx-7 w-56 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
+                    <li className="mb-12 mx-7 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
                         <Link to="/article" className="flex items-start justify-items-start">
                             <img src={article} alt="icon article" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -56,7 +56,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
 
-                    <li className="mb-12 mx-7 w-56 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
+                    <li className="mb-12 mx-7 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
                         <Link to="/user" className="flex items-start justify-items-start">
                             <img src={user} alt="icon user" className="inline w-5"/>
                             <h1 className="ml-3">
