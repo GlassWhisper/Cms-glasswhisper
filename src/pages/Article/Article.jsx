@@ -1,13 +1,13 @@
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toast from "@radix-ui/react-toast";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import axiosInstance from "../../services/Api";
 
 const Article = () => {
-  // const { mutate } = useSWRConfig();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [articleToDelete, setArticleToDelete] = useState(null);
   const [notification, setNotification] = useState({
@@ -21,7 +21,7 @@ const Article = () => {
     return response.data;
   };
 
-  const { data } = useSWR("article", fetcher);
+  const { data, mutate } = useSWR("article", fetcher);
 
   const initiateDelete = (articleId) => {
     setArticleToDelete(articleId);
@@ -39,7 +39,7 @@ const Article = () => {
         message: "Article deleted successfully",
         type: "success",
       });
-      mutate("article");
+      mutate();
 
       setTimeout(() => {
         setNotification({ show: false, message: "", type: "" });
@@ -53,6 +53,7 @@ const Article = () => {
     }
   };
 
+  // Loading state
   if (!data) {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
@@ -64,6 +65,7 @@ const Article = () => {
     );
   }
 
+  // Empty state
   if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
     return (
       <div className="min-h-[400px] flex items-center justify-center">
@@ -121,84 +123,96 @@ const Article = () => {
                   <th className="py-4 px-6 text-left font-medium">No</th>
                   <th className="py-4 px-6 text-left font-medium">Image</th>
                   <th className="py-4 px-6 text-left font-medium">Title</th>
-                  <th className="py-4 px-6 text-left font-medium">
-                    Description
-                  </th>
+                  <th className="py-4 px-6 text-left font-medium">Description</th>
                   <th className="py-4 px-6 text-center font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y bg-colorAbout">
-                {data.data.map((article, index) => (
-                  <tr
-                    key={article.id}
-                    className="hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <td className="py-4 px-6 text-gray-800 font-medium">
-                      {index + 1}
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="relative h-16 w-16 rounded-lg overflow-hidden ring-2 ring-gray-100">
-                        <img
-                          src={article.image}
-                          alt={article.title}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                    </td>
-                    <td className="py-4 px-6">
-                      <h3 className="font-medium text-gray-800 mb-1">
-                        {article.title}
-                      </h3>
-                    </td>
-                    <td className="py-4 px-6">
-                      <p className="text-gray-600 line-clamp-2">
-                        {article.deskripsi}
-                      </p>
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center justify-center gap-2">
-                        <Link
-                          to={`/article/edit/${article.id}`}
-                          className="bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                <AnimatePresence mode="popLayout">
+                  {data.data.map((article, index) => (
+                    <motion.tr
+                      key={article.id}
+                      className="hover:bg-gray-50 transition-colors duration-200"
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ 
+                        opacity: 0,
+                        y: -20,
+                        transition: { duration: 0.2 }
+                      }}
+                      transition={{
+                        duration: 0.2,
+                        ease: "easeInOut"
+                      }}
+                    >
+                      <td className="py-4 px-6 text-gray-800 font-medium">
+                        {index + 1}
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="relative h-16 w-16 rounded-lg overflow-hidden ring-2 ring-gray-100">
+                          <img
+                            src={article.image}
+                            alt={article.title}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <h3 className="font-medium text-gray-800 mb-1">
+                          {article.title}
+                        </h3>
+                      </td>
+                      <td className="py-4 px-6">
+                        <p className="text-gray-600 line-clamp-2">
+                          {article.deskripsi}
+                        </p>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="flex items-center justify-center gap-2">
+                          <Link
+                            to={`/article/edit/${article.id}`}
+                            className="bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                            />
-                          </svg>
-                          Edit
-                        </Link>
-                        <button
-                          onClick={() => initiateDelete(article.id)}
-                          className="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                              />
+                            </svg>
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => initiateDelete(article.id)}
+                            className="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
               </tbody>
             </table>
           </div>
