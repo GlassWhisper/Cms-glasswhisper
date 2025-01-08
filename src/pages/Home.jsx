@@ -168,8 +168,8 @@ const Home = () => {
                         key={index}
                         className={`rounded-2xl p-6 transition-all duration-300 hover:shadow-lg ${
                           result.sentiment === "Positif"
-                            ? "bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-100"
-                            : "bg-red-50/50 hover:bg-red-50 border border-red-100"
+                            ? "bg-green-300 hover:bg-green-200 border border-emerald-100"
+                            : "bg-red-300 hover:bg-red-200 border border-red-100"
                         }`}
                       >
                         <div className="flex items-center mb-3">
