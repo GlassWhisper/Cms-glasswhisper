@@ -56,7 +56,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
 
-                    <li className="mb-12 mx-7 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
+                    <li className="mb-[600px] mx-7 px-8 py-5 rounded-full bg-footer placeholder-colorPlaceholder hover:bg-amber-800">
                         <Link to="/user" className="flex items-start justify-items-start">
                             <img src={user} alt="icon user" className="inline w-5"/>
                             <h1 className="ml-3">
@@ -65,7 +65,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
 
-                    <footer className="flex text-center bottom-0 absolute">
+                    <footer className="text-center bottom-0">
                         <li className="mb-6 mx-11 w-48 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder hover:bg-font  ">
                             <button onClick={handleLogout} className="flex items-start justify-items-center">
                                 <img src={logout} alt="icon logout" className="inline w-5 "/>
