@@ -7,8 +7,6 @@ import {
 import Login from "./pages/Login.jsx";
 import Dashboard from "./layout/Dashboard.jsx";
 import User from "./pages/User/User.jsx";
-import Profile from "./pages/Profile.jsx";
-import Setting from "./pages/Setting.jsx";
 import Article from "./pages/Article/Article.jsx";
 import Home from "./pages/Home.jsx";
 import AddArticle from "./pages/Article/AddArticle.jsx";
@@ -65,9 +63,7 @@ function App() {
           <Route path="/article" element={<Article />} />
           <Route path="/article/add" element={<AddArticle />} />
           <Route path="/article/edit/:id" element={<EditArticle />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/user" element={<User />} />
-          <Route path="/setting" element={<Setting />} />
         </Route>
       </Routes>
     </Router>
