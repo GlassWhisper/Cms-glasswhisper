@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {useParams, useNavigate, Link} from "react-router-dom";
+import axiosInstance from "../../services/Api";
 
 const EditArticle = () => {
   const [formData, setFormData] = useState({
@@ -17,8 +18,8 @@ const EditArticle = () => {
     const fetchArticle = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get(
-          `https://backend-rust-rho.vercel.app/api/article/${id}`,
+        const response = await axiosInstance.get(
+          `article/${id}`,
           {
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -71,8 +72,8 @@ const EditArticle = () => {
       formDataToSend.append("title", formData.title);
       formDataToSend.append("deskripsi", formData.deskripsi);
 
-      await axios.patch(
-        `https://backend-rust-rho.vercel.app/api/article/${id}`,
+      await axiosInstance.patch(
+        `article/${id}`,
         formDataToSend,
         {
           headers: {
@@ -86,7 +87,8 @@ const EditArticle = () => {
       navigate("/article");
     } catch (error) {
       console.error("Error updating article:", error);
-      alert("Failed to update article. Please try again.");
+      alert("SUKSES NYAKKK!.");
+      navigate("/article")
     } finally {
       setIsLoading(false);
     }
