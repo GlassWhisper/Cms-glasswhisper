@@ -15,6 +15,8 @@ const Article = () => {
     message: "",
     type: "",
   });
+  const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
+  const articlesPerPage = 5; // Jumlah artikel per halaman
 
   const fetcher = async () => {
     const response = await axiosInstance.get("article");
@@ -22,6 +24,11 @@ const Article = () => {
   };
 
   const { data, mutate } = useSWR("article", fetcher);
+
+  // Menghitung artikel yang akan ditampilkan pada halaman saat ini
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = data?.data.slice(indexOfFirstArticle, indexOfLastArticle);
 
   const initiateDelete = (articleId) => {
     setArticleToDelete(articleId);
@@ -84,6 +91,9 @@ const Article = () => {
     );
   }
 
+  // Menghitung total halaman
+  const totalPages = Math.ceil(data.data.length / articlesPerPage);
+
   return (
     <Toast.Provider swipeDirection="right">
       <div className="container mx-auto px-16 py-8">
@@ -129,7 +139,7 @@ const Article = () => {
               </thead>
               <tbody className="divide-y bg-colorAbout">
                 <AnimatePresence mode="popLayout">
-                  {data.data.map((article, index) => (
+                  {currentArticles?.map((article, index) => (
                     <motion.tr
                       key={article.id}
                       className="hover:bg-gray-50 transition-colors duration-200"
@@ -147,7 +157,7 @@ const Article = () => {
                       }}
                     >
                       <td className="py-4 px-6 text-gray-800 font-medium">
-                        {index + 1}
+                        {index + 1 + (currentPage - 1) * articlesPerPage}
                       </td>
                       <td className="py-4 px-6">
                         <div className="relative h-16 w-16 rounded-lg overflow-hidden ring-2 ring-gray-100">
@@ -174,38 +184,12 @@ const Article = () => {
                             to={`/article/edit/${article.id}`}
                             className="bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
                           >
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
                             Edit
                           </Link>
                           <button
                             onClick={() => initiateDelete(article.id)}
                             className="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
                           >
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                              />
-                            </svg>
                             Delete
                           </button>
                         </div>
@@ -216,6 +200,27 @@ const Article = () => {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Pagination Controls */}
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            className="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-400"
+            disabled={currentPage === 1}
+          >
+            Prev
+          </button>
+          <span className="mx-4 text-lg text-gray-600">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            className="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-400"
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
         </div>
 
         {/* Delete Confirmation Dialog */}

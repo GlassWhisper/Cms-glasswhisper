@@ -66,9 +66,9 @@ const Sidebar = () => {
                     </li>
 
                     <footer className="flex text-center bottom-0 absolute">
-                        <li className="mb-6 mx-11 w-48 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder hover:bg-font">
+                        <li className="mb-6 mx-11 w-48 px-8 py-3 rounded-full bg-button placeholder-colorPlaceholder hover:bg-font  ">
                             <button onClick={handleLogout} className="flex items-start justify-items-center">
-                                <img src={logout} alt="icon logout" className="inline w-5"/>
+                                <img src={logout} alt="icon logout" className="inline w-5 "/>
                                 <h1 className="ml-3">
                                     Log Out
                                 </h1>
