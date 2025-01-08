@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const AddArticle = () => {
   const [image, setImage] = useState(null); // File gambar
@@ -94,6 +94,17 @@ const AddArticle = () => {
               <div className="w-6 h-6 border-4 border-indigo-500 border-dashed rounded-full animate-spin"></div>
             </div>
           )}
+
+          <div className="pt-5">
+            <p className="text-black leading-6 text-center font-medium text-gray-500">
+              not so add? <n/>
+              <Link
+                  to="/article"
+                  className="text-blue-700">
+                back
+              </Link>
+            </p>
+          </div>
         </div>
       </form>
     </div>

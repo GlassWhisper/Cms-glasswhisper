@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import {useParams, useNavigate, Link} from "react-router-dom";
 
 const EditArticle = () => {
   const [formData, setFormData] = useState({
@@ -98,54 +98,65 @@ const EditArticle = () => {
       <form onSubmit={handleSubmit} className="my-10" encType="multipart/form-data">
         <div className="flex flex-col">
           {currentImage && (
-            <div className="mb-5">
-              <label className="font-bold text-slate-700 block mb-2">Current Image</label>
-              <img 
-                src={currentImage} 
-                alt="Current article" 
-                className="w-full h-48 object-cover rounded-lg mb-2"
-              />
-            </div>
+              <div className="mb-5">
+                <label className="font-bold text-slate-700 block mb-2">Current Image</label>
+                <img
+                    src={currentImage}
+                    alt="Current article"
+                    className="w-full h-48 object-cover rounded-lg mb-2"
+                />
+              </div>
           )}
           <div className="mb-5">
             <label className="font-bold text-slate-700">Upload New Image</label>
             <input
-              type="file"
-              name="image"
-              accept="image/*"
-              className="w-full py-3 mt-1 border text-black border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
-              onChange={handleFileChange}
+                type="file"
+                name="image"
+                accept="image/*"
+                className="w-full py-3 mt-1 border text-black border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                onChange={handleFileChange}
             />
           </div>
           <div className="mb-5">
             <label className="font-bold text-slate-700">Title</label>
             <input
-              type="text"
-              name="title"
-              className="w-full py-3 mt-1 border text-black border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
-              placeholder="Title"
-              value={formData.title}
-              onChange={handleInputChange}
+                type="text"
+                name="title"
+                className="w-full py-3 mt-1 border text-black border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                placeholder="Title"
+                value={formData.title}
+                onChange={handleInputChange}
             />
           </div>
           <div className="mb-5">
             <label className="font-bold text-slate-700">Description</label>
             <textarea
-              name="deskripsi"
-              className="w-full py-3 mt-1 border text-black border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
-              placeholder="Description"
-              value={formData.deskripsi}
-              onChange={handleInputChange}
-              rows={4}
+                name="deskripsi"
+                className="w-full py-3 mt-1 border text-black border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                placeholder="Description"
+                value={formData.deskripsi}
+                onChange={handleInputChange}
+                rows={4}
             />
           </div>
           <button
-            type="submit"
-            className="w-full py-3 font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={isLoading}
+              type="submit"
+              className="w-full py-3 font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg border-indigo-500 hover:shadow disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isLoading}
           >
             {isLoading ? "Updating..." : "Update Article"}
           </button>
+
+          <div className="pt-5">
+            <p className="text-black leading-6 text-center font-medium text-gray-500">
+              didnt feel like editing? <n/>
+              <Link
+                  to="/article"
+                  className="text-blue-700">
+                back to article list
+              </Link>
+            </p>
+          </div>
         </div>
       </form>
     </div>
