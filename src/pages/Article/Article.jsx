@@ -4,9 +4,100 @@ import { Link } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Toast from "@radix-ui/react-toast";
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 import axiosInstance from "../../services/Api";
 
+// Pagination Component
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const generatePageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('ellipsis');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('ellipsis');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('ellipsis');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('ellipsis');
+        pages.push(totalPages);
+      }
+    }
+    return pages;
+  };
+
+  const pages = generatePageNumbers();
+
+  return (
+    <div className="flex items-center justify-center space-x-2 my-8">
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 
+                 disabled:opacity-50 disabled:cursor-not-allowed
+                 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200
+                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-colorService"
+      >
+        <ChevronLeft className="w-5 h-5 text-gray-600" />
+      </button>
+
+      <div className="flex items-center space-x-1">
+        {pages.map((page, index) => (
+          page === 'ellipsis' ? (
+            <div key={index} className="flex items-center justify-center w-10 h-10">
+              <MoreHorizontal className="w-5 h-5 text-gray-400" />
+            </div>
+          ) : (
+            <button
+              key={index}
+              onClick={() => onPageChange(page)}
+              className={`
+                w-10 h-10 rounded-lg font-medium text-sm
+                transition-all duration-200
+                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-colorService
+                ${
+                  currentPage === page
+                    ? 'bg-colorService text-white shadow-lg shadow-blue-200'
+                    : 'text-gray-600 hover:bg-colorAbout border border-gray-200 hover:border-colorAbout'
+                }
+              `}
+            >
+              {page}
+            </button>
+          )
+        ))}
+      </div>
+
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 
+                 disabled:opacity-50 disabled:cursor-not-allowed
+                 hover:bg-gray-50 hover:border-gray-300 transition-all duration-200
+                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-colorService"
+      >
+        <ChevronRight className="w-5 h-5 text-gray-600" />
+      </button>
+    </div>
+  );
+};
+
+// Main Article Component
 const Article = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [articleToDelete, setArticleToDelete] = useState(null);
@@ -15,20 +106,71 @@ const Article = () => {
     message: "",
     type: "",
   });
-  const [currentPage, setCurrentPage] = useState(1); // Halaman saat ini
-  const articlesPerPage = 5; // Jumlah artikel per halaman
+  const [currentPage, setCurrentPage] = useState(1);
+  const articlesPerPage = 5;
 
+  // Fetcher function with error handling
   const fetcher = async () => {
-    const response = await axiosInstance.get("article");
-    return response.data;
+    try {
+      const response = await axiosInstance.get("article");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching articles:", error);
+      throw error;
+    }
   };
 
-  const { data, mutate } = useSWR("article", fetcher);
+  const { data, error, mutate } = useSWR("article", fetcher);
 
-  // Menghitung artikel yang akan ditampilkan pada halaman saat ini
+  // Handle loading and error states
+  if (error) {
+    console.error("Error in component:", error);
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="text-center text-red-600">
+          Error loading articles. Please try again later.
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+          <p className="text-gray-600 font-medium">Loading articles...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if data.data exists and is an array
+  const articles = Array.isArray(data.data) ? data.data : [];
+  
+  if (articles.length === 0) {
+    return (
+      <div className="min-h-[400px] flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            No Articles Found
+          </h2>
+          <Link
+            to="/article/add"
+            className="inline-flex items-center px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
+          >
+            Create Your First Article
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Calculate pagination
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
-  const currentArticles = data?.data.slice(indexOfFirstArticle, indexOfLastArticle);
+  const currentArticles = articles.slice(indexOfFirstArticle, indexOfLastArticle);
+  const totalPages = Math.ceil(articles.length / articlesPerPage);
 
   const initiateDelete = (articleId) => {
     setArticleToDelete(articleId);
@@ -52,6 +194,7 @@ const Article = () => {
         setNotification({ show: false, message: "", type: "" });
       }, 3000);
     } catch (error) {
+      console.error("Error deleting article:", error);
       setNotification({
         show: true,
         message: "Failed to delete the article",
@@ -59,40 +202,6 @@ const Article = () => {
       });
     }
   };
-
-  // Loading state
-  if (!data) {
-    return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-          <p className="text-gray-600 font-medium">Loading articles...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Empty state
-  if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
-    return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            No Articles Found
-          </h2>
-          <Link
-            to="/article/add"
-            className="inline-flex items-center px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
-          >
-            Create Your First Article
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  // Menghitung total halaman
-  const totalPages = Math.ceil(data.data.length / articlesPerPage);
 
   return (
     <Toast.Provider swipeDirection="right">
@@ -138,90 +247,59 @@ const Article = () => {
                 </tr>
               </thead>
               <tbody className="divide-y bg-colorAbout">
-                <AnimatePresence mode="popLayout">
-                  {currentArticles?.map((article, index) => (
-                    <motion.tr
-                      key={article.id}
-                      className="hover:bg-gray-50 transition-colors duration-200"
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ 
-                        opacity: 0,
-                        y: -20,
-                        transition: { duration: 0.2 }
-                      }}
-                      transition={{
-                        duration: 0.2,
-                        ease: "easeInOut"
-                      }}
-                    >
-                      <td className="py-4 px-6 text-gray-800 font-medium">
-                        {index + 1 + (currentPage - 1) * articlesPerPage}
-                      </td>
-                      <td className="py-4 px-6">
-                        <div className="relative h-16 w-16 rounded-lg overflow-hidden ring-2 ring-gray-100">
-                          <img
-                            src={article.image}
-                            alt={article.title}
-                            className="h-full w-full object-cover"
-                          />
-                        </div>
-                      </td>
-                      <td className="py-4 px-6">
-                        <h3 className="font-medium text-gray-800 mb-1">
-                          {article.title}
-                        </h3>
-                      </td>
-                      <td className="py-4 px-6">
-                        <p className="text-gray-600 line-clamp-2">
-                          {article.deskripsi}
-                        </p>
-                      </td>
-                      <td className="py-4 px-6">
-                        <div className="flex items-center justify-center gap-2">
-                          <Link
-                            to={`/article/edit/${article.id}`}
-                            className="bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => initiateDelete(article.id)}
-                            className="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </td>
-                    </motion.tr>
-                  ))}
-                </AnimatePresence>
+                {currentArticles.map((article, index) => (
+                  <tr key={article.id}>
+                    <td className="py-4 px-6 text-gray-800 font-medium">
+                      {index + 1 + (currentPage - 1) * articlesPerPage}
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="relative h-16 w-16 rounded-lg overflow-hidden ring-2 ring-gray-100">
+                        <img
+                          src={article.image}
+                          alt={article.title}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
+                      <h3 className="font-medium text-gray-800 mb-1">
+                        {article.title}
+                      </h3>
+                    </td>
+                    <td className="py-4 px-6">
+                      <p className="text-gray-600 line-clamp-2">
+                        {article.deskripsi}
+                      </p>
+                    </td>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center justify-center gap-2">
+                        <Link
+                          to={`/article/edit/${article.id}`}
+                          className="bg-blue-100 text-blue-600 hover:bg-blue-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
+                        >
+                          Edit
+                        </Link>
+                        <button
+                          onClick={() => initiateDelete(article.id)}
+                          className="bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2 font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Pagination Controls */}
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            className="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-400"
-            disabled={currentPage === 1}
-          >
-            Prev
-          </button>
-          <span className="mx-4 text-lg text-gray-600">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            className="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-400"
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-        </div>
+        {/* Modern Pagination */}
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
 
         {/* Delete Confirmation Dialog */}
         <Dialog.Root open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
