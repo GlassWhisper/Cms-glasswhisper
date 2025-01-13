@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 const Home = () => {
   const [feedback, setFeedback] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDeleting, setIsDeleting] = useState(false);
   const itemsPerPage = 5;
   const chartInstance = useRef(null);
 
@@ -16,6 +17,33 @@ const Home = () => {
     } catch (error) {
       console.error("Error fetching feedback data:", error);
       return [];
+    }
+  };
+
+  const deleteFeedback = async (id) => {
+    if (!id || isDeleting) return;
+
+    try {
+      setIsDeleting(true);
+      await axios.delete(`https://2hn6tjlz-5000.asse.devtunnels.ms/feedback/${id}`);
+      
+      // Update local state after successful deletion
+      const updatedFeedback = feedback.filter(item => item.id !== id);
+      setFeedback(updatedFeedback);
+      
+      // Update chart
+      renderSentimentChart(updatedFeedback);
+      
+      // Adjust current page if necessary
+      const newTotalPages = Math.ceil(updatedFeedback.length / itemsPerPage);
+      if (currentPage > newTotalPages && newTotalPages > 0) {
+        setCurrentPage(newTotalPages);
+      }
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+      alert("Failed to delete feedback. Please try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -166,12 +194,32 @@ const Home = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
                         key={index}
-                        className={`rounded-2xl p-6 transition-all duration-300 hover:shadow-lg ${
+                        className={`relative rounded-2xl p-6 transition-all duration-300 hover:shadow-lg ${
                           result.sentiment === "Positif"
                             ? "bg-green-300 hover:bg-green-200 border border-emerald-100"
                             : "bg-red-300 hover:bg-red-200 border border-red-100"
                         }`}
                       >
+                        <button
+                          onClick={() => deleteFeedback(result.id)}
+                          disabled={isDeleting}
+                          className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/20 transition-colors duration-200"
+                          title="Delete feedback"
+                        >
+                          <svg 
+                            className="w-5 h-5 text-gray-700 hover:text-red-600" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+                            />
+                          </svg>
+                        </button>
                         <div className="flex items-center mb-3">
                           <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
                             <span className="text-gray-600 font-medium">
@@ -214,7 +262,7 @@ const Home = () => {
                       className={`px-6 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-2 ${
                         currentPage === 1
                           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
+                          : "bg-navColor text-white hover:bg-button shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
                       }`}
                     >
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -231,7 +279,7 @@ const Home = () => {
                       className={`px-6 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-2 ${
                         currentPage === totalPages
                           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
+                          : "bg-navColor text-white hover:bg-button shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
                       }`}
                     >
                       Next
