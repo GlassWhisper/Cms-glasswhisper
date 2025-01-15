@@ -81,7 +81,7 @@ const User = () => {
 
   return (
     <Toast.Provider swipeDirection="right">
-      <div className="overflow-x-auto p-8 text-black bg-gray-50 min-h-screen">
+      <div className="overflow-x-auto p-8 text-black bg-footer min-h-screen">
         {/* Delete Confirmation Dialog */}
         <Dialog.Root open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
           <Dialog.Portal>
@@ -144,7 +144,7 @@ const User = () => {
             </h1>
           </div>
 
-          <div className="rounded-2xl bg-white shadow-xl border border-gray-100 overflow-hidden">
+          <div className="rounded-2xl bg-colorAbout shadow-xl border border-bg overflow-hidden">
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
                 <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
@@ -162,12 +162,12 @@ const User = () => {
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
-                      <tr className="bg-gray-50 border-b border-gray-100">
-                        <th className="px-6 py-4 text-left font-semibold text-gray-600">No</th>
-                        <th className="px-6 py-4 text-left font-semibold text-gray-600">Username</th>
-                        <th className="px-6 py-4 text-left font-semibold text-gray-600">Email</th>
-                        <th className="px-6 py-4 text-left font-semibold text-gray-600">Role</th>
-                        <th className="px-6 py-4 text-left font-semibold text-gray-600">Actions</th>
+                      <tr className="bg-navColor border-b border-gray-100">
+                        <th className="px-6 py-4 text-left font-semibold text-white">No</th>
+                        <th className="px-6 py-4 text-left font-semibold text-white">Username</th>
+                        <th className="px-6 py-4 text-left font-semibold text-white">Email</th>
+                        <th className="px-6 py-4 text-left font-semibold text-white">Role</th>
+                        <th className="px-6 py-4 text-left font-semibold text-white">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
